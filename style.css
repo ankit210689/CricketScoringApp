@@ -43,6 +43,13 @@ h1 {
   margin-bottom: 10px; /* Space between cards vertically */
 }
 
+/* Double the width of the extras box */
+#extras-counter {
+    width: 100%; /* Take full width on mobile */
+    max-width: 960px; /* Increased by 50% from 640px (640 * 1.5 = 960) */
+}
+
+
 .counter h2, .counter h3 {
   margin: 8px 0; /* Reduced margin */
   font-size: 1.3em; /* Slightly larger headings */
@@ -164,6 +171,41 @@ button:hover {
     color: #6c757d;
 }
 
+/* NEW: Styles for editable name inputs */
+.name-edit-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap; /* Allow wrapping if needed */
+}
+
+.name-edit-container .name-display {
+    flex-grow: 1;
+    text-align: left;
+    font-weight: bold;
+}
+
+.name-edit-container .name-input {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9em;
+    display: none; /* Hidden by default */
+    box-sizing: border-box;
+}
+
+.name-edit-container .edit-button {
+    background-color: #6c757d;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    margin: 0;
+}
+.name-edit-container .edit-button:hover {
+    background-color: #5a6268;
+}
+
+
 select#current_bowler_select {
     width: calc(100% - 10px); /* Adjust for padding */
     padding: 10px;
@@ -195,17 +237,20 @@ select#current_bowler_select {
     padding: 10px 15px; /* Larger padding for touch */
     border-bottom: 1px solid #f0f0f0; /* Lighter border */
     font-size: 1.1em;
-    flex-wrap: wrap; /* Allow name and button to wrap if needed */
+    flex-wrap: nowrap; /* Prevent wrapping for player name/button */
+    gap: 5px;
 }
 
 .player-item:last-child {
     border-bottom: none;
 }
 
-.player-item span {
-    flex-basis: auto; /* Allow name to take natural width */
-    margin-right: 10px; /* Space between name and button */
-    word-break: break-word; /* Prevent long names from overflowing */
+/* Ensure player name display and input play well together */
+.player-item .name-display,
+.player-item .name-input {
+    flex-grow: 1; /* Allow them to take available space */
+    min-width: 0; /* Allow shrinking if needed */
+    text-align: left; /* Align text to left */
 }
 
 .player-item button {
@@ -226,26 +271,34 @@ select#current_bowler_select {
     font-style: italic;
 }
 
-/* NEW: Extras Counter Styling */
+/* Extras Counter Styling */
 .extras-counter .extra-buttons {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
+    flex-wrap: nowrap; /* Forces items onto a single line */
+    justify-content: space-evenly; /* Distributes space evenly */
+    align-items: center;
     margin-top: 10px;
+    gap: 3px; /* Reduced gap */
+    overflow-x: auto; /* Allows horizontal scrolling if content overflows */
+    padding-bottom: 5px; /* Adds a bit of padding for scrollbar */
 }
+
 .extras-counter .extra-buttons button,
 .extras-counter .extra-buttons select {
-    flex: 1 1 auto; /* Allow items to grow and shrink */
-    min-width: 80px; /* Ensure buttons don't get too small */
-    padding: 10px 15px;
-    font-size: 1em;
+    flex: 0 0 auto; /* Prevent items from growing or shrinking, take natural width */
+    min-width: 60px; /* Slightly increased min-width from 55px */
+    padding: 6px 8px; /* Standard padding */
+    font-size: 0.75em; /* Standard font size */
+    box-sizing: border-box; /* Include padding and border in element's total width */
+    white-space: nowrap; /* Ensure text stays on one line within the button/select */
 }
+
 .extras-counter select {
     border: 1px solid #ced4da;
     border-radius: 5px;
     background-color: #fff;
 }
+
 .extras-counter p {
     font-size: 0.95em;
     color: #6c757d;
@@ -267,6 +320,12 @@ select#current_bowler_select {
     width: calc(50% - 30px); /* Two columns on wider screens */
     max-width: 380px;
   }
+  /* Adjust extras box width on wider screens */
+  #extras-counter {
+      width: calc(100% - 30px); /* Keep it roughly full width of its container on medium screens */
+      max-width: 1140px; /* Increased by 50% from 760px (760 * 1.5 = 1140) */
+  }
+
   .batsmen-section, .bowlers-section, .selection-section {
     width: calc(50% - 30px); /* Adjust width for 2-column layout */
   }
@@ -286,6 +345,11 @@ select#current_bowler_select {
     width: auto;
     min-width: 280px;
     max-width: 400px;
+  }
+  /* Adjust extras box width on large screens */
+  #extras-counter {
+      width: auto; /* Revert to auto, as it will be constrained by max-width */
+      max-width: 1200px; /* Increased by 50% from 800px (800 * 1.5 = 1200) */
   }
   .batsmen-section {
     width: calc(40% - 30px);
@@ -315,6 +379,12 @@ select#current_bowler_select {
         max-width: unset; /* Override max-width */
         padding: 10px;
     }
+    /* Adjust extras box width for landscape mode */
+    #extras-counter {
+        width: calc(100% - 20px); /* Make it span almost full width */
+        max-width: unset; /* Allow it to grow, as it will be contained by its parent */
+    }
+
     .batsmen-section, .bowlers-section, .selection-section {
         width: calc(50% - 20px);
         padding: 10px;
@@ -332,5 +402,14 @@ select#current_bowler_select {
     .player-item button {
         padding: 5px 8px;
         font-size: 0.8em;
+    }
+
+    /* Adjust extras for landscape on smaller screens */
+    .extras-counter .extra-buttons button,
+    .extras-counter .extra-buttons select {
+        min-width: 50px; /* Standard min-width */
+        padding: 4px 6px;
+        font-size: 0.65em;
+        white-space: nowrap;
     }
 }
