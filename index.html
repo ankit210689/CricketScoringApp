@@ -11,7 +11,7 @@
   <div class="scoreboard">
     <div class="counter">
       <h2>Total Runs: <span id="runs">0</span></h2>
-      </div>
+    </div>
 
     <div class="counter">
       <h2>Wickets: <span id="wickets">0</span></h2>
@@ -23,13 +23,38 @@
       <h2>Balls: <span id="balls">0</span></h2>
       <h3>Overs: <span id="overs">0.0</span></h3>
       <button onclick="addDotBall()">Dot Ball</button>
-      <button onclick="removeLastBall()">Undo Last Ball</button>
+      <button onclick="undoLastAction()">Undo Last Action</button>
     </div>
 
     <div class="counter">
       <h2>Target: <span id="target">100</span></h2>
       <button onclick="changeTarget(5)">+5</button>
       <button onclick="changeTarget(-5)">-5</button>
+    </div>
+
+    <div class="counter extras-counter">
+      <h2>Extras: <span id="extras_total">0</span></h2>
+      <p>Wides: <span id="wides_count">0</span> | No-balls: <span id="noballs_count">0</span> | Byes: <span id="byes_count">0</span> | Leg Byes: <span id="legbyes_count">0</span></p>
+      <div class="extra-buttons">
+        <button onclick="addExtra('wide', 1, false)">Wide (+1)</button>
+        <button onclick="addExtra('noball', 1, false)">No-Ball (+1)</button>
+
+        <select id="bye_run_selector">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        <button onclick="addExtra('bye', parseInt(document.getElementById('bye_run_selector').value), true)">Byes</button>
+
+        <select id="legbye_run_selector">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        <button onclick="addExtra('legbye', parseInt(document.getElementById('legbye_run_selector').value), true)">Leg Byes</button>
+      </div>
     </div>
   </div>
 
@@ -54,7 +79,6 @@
               <option value="6">6 Runs</option>
           </select>
           <button onclick="scoreRuns()" class="score-button">Score Runs</button>
-          <button onclick="undoLastAction()" class="undo-button">Undo Last Action</button>
           <button onclick="batsmanOut()" class="wicket-button">Wicket (Batsman on strike)</button>
           <button onclick="switchStrike()" class="strike-button">Switch Strike</button>
           <h3 class="on-strike">On Strike: <span id="on_strike">N/A</span></h3>
