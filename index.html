@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cricket Scoring App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Cricket Scoring App</h1>
+
+  <div class="scoreboard">
+    <div class="counter">
+      <h2>Total Runs: <span id="runs">0</span></h2>
+      </div>
+
+    <div class="counter">
+      <h2>Wickets: <span id="wickets">0</span></h2>
+      <button onclick="changeWickets(1)">+1 Wicket</button>
+      <button onclick="changeWickets(-1)">-1 Wicket</button>
+    </div>
+
+    <div class="counter">
+      <h2>Balls: <span id="balls">0</span></h2>
+      <h3>Overs: <span id="overs">0.0</span></h3>
+      <button onclick="addDotBall()">Dot Ball</button>
+      <button onclick="removeLastBall()">Undo Last Ball</button>
+    </div>
+
+    <div class="counter">
+      <h2>Target: <span id="target">100</span></h2>
+      <button onclick="changeTarget(5)">+5</button>
+      <button onclick="changeTarget(-5)">-5</button>
+    </div>
+  </div>
+
+  <div class="players-stats">
+    <div class="batsmen-section counter">
+      <h2>Batsmen at Crease</h2>
+      <div id="active-batsman-1" class="batsman active">
+        <h3>No Batsman Selected</h3>
+        <p>Runs: 0 (0)</p>
+      </div>
+      <div id="active-batsman-2" class="batsman active">
+        <h3>No Batsman Selected</h3>
+        <p>Runs: 0 (0)</p>
+      </div>
+
+      <div class="batsman-actions">
+          <select id="run_selector">
+              <option value="1">1 Run</option>
+              <option value="2">2 Runs</option>
+              <option value="3">3 Runs</option>
+              <option value="4">4 Runs</option>
+              <option value="6">6 Runs</option>
+          </select>
+          <button onclick="scoreRuns()" class="score-button">Score Runs</button>
+          <button onclick="undoLastAction()" class="undo-button">Undo Last Action</button>
+          <button onclick="batsmanOut()" class="wicket-button">Wicket (Batsman on strike)</button>
+          <button onclick="switchStrike()" class="strike-button">Switch Strike</button>
+          <h3 class="on-strike">On Strike: <span id="on_strike">N/A</span></h3>
+      </div>
+    </div>
+
+    <div class="bowlers-section counter">
+      <h2>Bowler Statistics</h2>
+      <div id="bowler-list">
+        </div>
+      <select id="current_bowler_select" onchange="updateCurrentBowler()">
+        </select>
+      <h3 class="on-strike">Current Bowler: <span id="current_bowler_name">N/A</span></h3>
+    </div>
+  </div>
+
+  <div class="selection-section counter">
+    <h2>Team Players & Selection</h2>
+    <div id="player-selection-list">
+      </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

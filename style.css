@@ -1,0 +1,308 @@
+/* General Body Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  background: #f8f9fa; /* Lighter background */
+  margin: 0;
+  padding: 0;
+  color: #343a40; /* Darker text for readability */
+  -webkit-touch-callout: none; /* Disable callout on long press */
+  -webkit-user-select: none; /* Disable text selection */
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; /* Prevent accidental text selection on touch devices */
+}
+
+h1 {
+  color: #212529;
+  padding: 20px 10px;
+  margin-bottom: 0; /* Adjust margin */
+  font-size: 2.2em; /* Larger title for mobile */
+}
+
+/* Main Layout Containers */
+.scoreboard, .players-stats, .selection-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px; /* Slightly reduced gap for mobile */
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+/* Individual Counter/Section Card Styling */
+.counter {
+  background: white;
+  padding: 15px;
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer, more prominent shadow */
+  width: 95%; /* Wider default for mobile screens */
+  max-width: 320px; /* Limit width on larger phones */
+  box-sizing: border-box;
+  margin-bottom: 10px; /* Space between cards vertically */
+}
+
+.counter h2, .counter h3 {
+  margin: 8px 0; /* Reduced margin */
+  font-size: 1.3em; /* Slightly larger headings */
+  color: #495057;
+}
+
+/* Button Styling */
+button {
+  margin: 5px 3px; /* Smaller horizontal margin */
+  padding: 12px 18px; /* Larger padding for easier tapping */
+  font-size: 1.1em; /* Larger font size for readability */
+  border: none;
+  border-radius: 8px; /* More rounded buttons */
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease; /* Add transform for tap feedback */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* Remove tap highlight on iOS */
+}
+
+button:active { /* Visual feedback on tap */
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Specific styles for sections */
+.batsmen-section, .bowlers-section, .selection-section {
+  max-width: 700px; /* Allows these to stretch on wider screens */
+  width: 95%; /* Default full width for mobile */
+  gap: 10px;
+  padding: 15px; /* More internal padding */
+}
+
+.batsman.active { /* Specific style for active batsman slots */
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.batsman h3, .batsman p {
+    margin: 3px 0; /* Tighter spacing */
+    font-size: 1.1em;
+}
+
+.batsman-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* Tighter gap */
+    margin-top: 10px;
+}
+
+.batsman-actions select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    font-size: 1em;
+    flex-grow: 1; /* Allow select to grow */
+    min-width: 120px; /* Ensure it's not too small */
+}
+
+.score-button { background-color: #28a745; } /* Green for scoring */
+.score-button:hover { background-color: #218838; }
+
+.undo-button {
+    background-color: #ffc107;
+    color: #343a40; /* Darker text for contrast */
+}
+.undo-button:hover { background-color: #e0a800; }
+
+.wicket-button { background-color: #dc3545; } /* Red for wicket */
+.wicket-button:hover { background-color: #c82333; }
+
+.strike-button { background-color: #6c757d; } /* Gray for strike */
+.strike-button:hover { background-color: #5a6268; }
+
+.on-strike {
+    color: #007bff;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1.2em;
+}
+
+.batsman.on-strike-highlight {
+    background-color: #d1ecf1; /* Light blue highlight for batsman on strike */
+    border-color: #bee5eb;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.bowler-stats {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.bowler-stats h4 {
+    margin: 5px 0;
+    width: 100%;
+    color: #007bff;
+}
+
+.bowler-stats span {
+    display: inline-block;
+    margin-right: 10px; /* Reduced margin */
+    font-size: 0.95em;
+    color: #6c757d;
+}
+
+select#current_bowler_select {
+    width: calc(100% - 10px); /* Adjust for padding */
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    font-size: 1.1em;
+    background-color: #fff;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4L146.2%20208.6%205.4%2069.4c-1.3-1.3-3.9-1.3-5.2%200-1.3%201.3-1.3%203.9%200%205.2l143%20143c.7.7%201.3%201%202.6%201s1.9-.3%202.6-1l143-143c1.3-1.3%201.3-3.9%200-5.2-1.2-1.3-3.8-1.3-5.1-.1z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+/* Player Selection List */
+#player-selection-list {
+    max-height: 300px; /* Max height for scrollability */
+    overflow-y: auto; /* Enable scrolling */
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.player-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px; /* Larger padding for touch */
+    border-bottom: 1px solid #f0f0f0; /* Lighter border */
+    font-size: 1.1em;
+    flex-wrap: wrap; /* Allow name and button to wrap if needed */
+}
+
+.player-item:last-child {
+    border-bottom: none;
+}
+
+.player-item span {
+    flex-basis: auto; /* Allow name to take natural width */
+    margin-right: 10px; /* Space between name and button */
+    word-break: break-word; /* Prevent long names from overflowing */
+}
+
+.player-item button {
+    margin: 0;
+    padding: 8px 12px; /* Smaller button for list */
+    font-size: 0.9em;
+    flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.player-item.selected {
+    background-color: #e0f7fa;
+    font-weight: bold;
+}
+
+.player-item.out {
+    color: #dc3545;
+    text-decoration: line-through;
+    font-style: italic;
+}
+
+/* Responsive Tweaks (Media Queries) */
+@media (min-width: 600px) {
+  h1 {
+    font-size: 2.5em;
+  }
+  .scoreboard, .players-stats, .selection-section {
+    gap: 20px;
+    padding: 15px;
+  }
+  .counter {
+    width: calc(50% - 30px); /* Two columns on wider screens */
+    max-width: 380px;
+  }
+  .batsmen-section, .bowlers-section, .selection-section {
+    width: calc(50% - 30px); /* Adjust width for 2-column layout */
+  }
+  .batsman-actions select {
+      max-width: 150px; /* Constrain select width */
+  }
+}
+
+@media (min-width: 900px) {
+  h1 {
+    font-size: 3em;
+  }
+  .scoreboard, .players-stats, .selection-section {
+    justify-content: center;
+  }
+  .counter {
+    width: auto;
+    min-width: 280px;
+    max-width: 400px;
+  }
+  .batsmen-section {
+    width: calc(40% - 30px);
+    max-width: 500px; /* Allow wider for batsmen details */
+  }
+  .bowlers-section {
+    width: calc(30% - 30px);
+    max-width: 380px;
+  }
+  .selection-section {
+    width: calc(25% - 30px);
+    max-width: 320px;
+  }
+}
+
+/* Landscape mode for phones */
+@media screen and (max-width: 900px) and (orientation: landscape) {
+    .scoreboard, .players-stats, .selection-section {
+        flex-direction: row; /* Keep elements in a row */
+        justify-content: space-evenly;
+        padding: 10px;
+        gap: 10px;
+    }
+    .counter {
+        width: calc(50% - 20px); /* Two columns */
+        min-width: unset; /* Override min-width */
+        max-width: unset; /* Override max-width */
+        padding: 10px;
+    }
+    .batsmen-section, .bowlers-section, .selection-section {
+        width: calc(50% - 20px);
+        padding: 10px;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    .batsman-actions button, .batsman-actions select {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    .player-item {
+        padding: 8px 10px;
+    }
+    .player-item button {
+        padding: 5px 8px;
+        font-size: 0.8em;
+    }
+}
