@@ -15,7 +15,7 @@ let teamPlayers = [];
 for (let i = 1; i <= 11; i++) {
     teamPlayers.push({
         id: i,
-        name: `Player ${i}`,
+        name: `Player ${i}`, // Default name
         runs: 0,
         balls: 0,
         isOut: false,
@@ -56,7 +56,7 @@ function initializeGame() {
     updateTargetDisplay();
     updateExtrasDisplay(); // Display extras on load
     renderPlayerSelectionList();
-    renderBowlerOptions();
+    renderBowlerOptions(); // Ensure bowler options reflect default names
     generateBowlerStatsDisplay();
     updateCurrentBowlerNameDisplay();
     updateCurrentBattingDisplay(); // Initialize with "No Batsman Selected"
@@ -107,7 +107,7 @@ function updateCurrentBattingDisplay() {
         batsman2Div.innerHTML = `<h3>${currentBattingPlayers[1].name}</h3><p>Runs: ${currentBattingPlayers[1].runs} (${currentBattingPlayers[1].balls})</p>`;
         batsman2Div.classList.toggle('on-strike-highlight', strikeBatsmanIndex === 1);
     } else {
-        batsman2Div.innerHTML = `<h3><h3>No Batsman Selected</h3><p>Runs: 0 (0)</p>`;
+        batsman2Div.innerHTML = `<h3>No Batsman Selected</h3><p>Runs: 0 (0)</p>`;
         batsman2Div.classList.remove('on-strike-highlight');
     }
 
@@ -278,7 +278,7 @@ function switchStrike() {
     }
 }
 
-// --- NEW: Extra Scoring Functions ---
+// --- Extra Scoring Functions ---
 function addExtra(extraType, runValue, isLegalDelivery) {
     if (!currentBattingPlayers[0]) {
         alert("Please select at least one batsman before adding extras.");
@@ -377,31 +377,15 @@ function undoLastAction() {
             }
 
             // Restore batsman to current batting players
-            // This logic needs to be careful about which slot they go back into
-            if (currentBattingPlayers.length === 0) {
-                currentBattingPlayers.push(batsman);
-                strikeBatsmanIndex = 0; // Assume they take strike if no one else is there
-            } else if (currentBattingPlayers.length === 1) {
-                // If one batsman is there, place the undone batsman in the other slot.
-                if (!currentBattingPlayers.includes(batsman)) { // Only add if not already present
-                    if (currentBattingPlayers[0] && currentBattingPlayers[0].id === lastAction.batsmanId) {
-                         // This would mean the batsman was already restored, or state is odd.
-                    } else {
-                        // Find the empty slot and add the batsman back
-                        // A simple approach: if currentBattingPlayers has one member, add the undone one to the other slot.
-                        // And usually the existing batsman retains strike if the new one comes in.
-                        if (currentBattingPlayers[0]) { // If slot 0 is occupied, add to slot 1
-                            currentBattingPlayers[1] = batsman;
-                            strikeBatsmanIndex = 0; // Existing player keeps strike
-                        } else { // Slot 0 is empty (e.g. only 1 active, or an error state)
-                            currentBattingPlayers[0] = batsman;
-                            strikeBatsmanIndex = 0; // New player takes strike
-                        }
-                    }
+            if (currentBattingPlayers.length < 2 && !currentBattingPlayers.includes(batsman)) {
+                if (!currentBattingPlayers[0]) {
+                    currentBattingPlayers.unshift(batsman); // Add to beginning (index 0)
+                    strikeBatsmanIndex = 0; // New player takes strike
+                } else { // Slot 1 must be empty
+                    currentBattingPlayers.push(batsman); // Add to end (index 1)
+                    strikeBatsmanIndex = 0; // Existing player keeps strike
                 }
             } else {
-                 // This case (undoing wicket when 2 batsmen are already active) should ideally not happen
-                 // if scoring is sequential, but if it does, the game state is complex.
                  console.warn("Undo Wicket: State might be inconsistent, manual adjustment may be needed.");
                  batsman.isOut = false; // Still mark as not out in teamPlayers
             }
@@ -462,7 +446,50 @@ function renderPlayerSelectionList() {
             playerItem.classList.add('out');
         }
 
-        playerItem.innerHTML = `<span>${player.name}</span>`;
+        const nameContainer = document.createElement('div');
+        nameContainer.className = 'name-edit-container';
+
+        const nameDisplay = document.createElement('span');
+        nameDisplay.className = 'name-display';
+        nameDisplay.textContent = player.name;
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.className = 'name-input';
+        nameInput.value = player.name;
+        nameInput.style.display = 'none'; // Hidden by default
+
+        const editButton = document.createElement('button');
+        editButton.className = 'edit-button';
+        editButton.textContent = 'Edit';
+
+        nameContainer.appendChild(nameDisplay);
+        nameContainer.appendChild(nameInput);
+        nameContainer.appendChild(editButton);
+
+        playerItem.appendChild(nameContainer);
+
+        // Event listeners for name editing
+        editButton.addEventListener('click', () => {
+            nameDisplay.style.display = 'none';
+            nameInput.style.display = 'inline-block';
+            nameInput.focus();
+        });
+
+        nameInput.addEventListener('blur', () => {
+            player.name = nameInput.value.trim() || `Player ${player.id}`; // Default if empty
+            nameDisplay.textContent = player.name;
+            nameInput.style.display = 'none';
+            nameDisplay.style.display = 'inline-block';
+            updateCurrentBattingDisplay(); // Update if this player is batting
+            renderBowlerOptions(); // Update bowler selection if player names are used there
+        });
+
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                nameInput.blur(); // Trigger blur to save
+            }
+        });
 
         // Add stats for out players or those who have batted
         if (player.isOut || (player.runs > 0 || player.balls > 0)) {
@@ -470,7 +497,6 @@ function renderPlayerSelectionList() {
             statsSpan.textContent = `(${player.runs} runs, ${player.balls} balls)`;
             playerItem.appendChild(statsSpan);
         }
-
 
         if (!currentBattingPlayers.includes(player) && !player.isOut && wickets < 10 && currentBattingPlayers.length < 2) {
             const selectButton = document.createElement('button');
@@ -522,10 +548,8 @@ function selectPlayerForBatting(playerId) {
     // If the striker got out, the non-striker became the striker (index 0).
     // The new batsman comes into the empty slot.
     if (currentBattingPlayers.length === 2) {
-        // Find the index of the newly added player
         const newPlayerIndex = currentBattingPlayers.indexOf(playerToSelect);
-        // The other player (who was already there) should remain on strike
-        strikeBatsmanIndex = (newPlayerIndex === 0) ? 1 : 0;
+        strikeBatsmanIndex = (newPlayerIndex === 0) ? 1 : 0; // Existing player keeps strike by default
     } else { // Only one batsman, so they are the striker
         strikeBatsmanIndex = 0;
     }
@@ -543,7 +567,7 @@ function renderBowlerOptions() {
     bowlers.forEach((bowler, index) => {
         const option = document.createElement('option');
         option.value = index;
-        option.textContent = bowler.name;
+        option.textContent = bowler.name; // Use custom name
         select.appendChild(option);
     });
     // Set initial selection
@@ -559,9 +583,30 @@ function generateBowlerStatsDisplay() {
         bowlerDiv.className = 'bowler-stats';
         bowlerDiv.id = `bowler_${bowler.id}`; // Add an ID for easy updating
 
-        const nameH4 = document.createElement('h4');
-        nameH4.textContent = bowler.name;
-        bowlerDiv.appendChild(nameH4);
+        const nameContainer = document.createElement('div');
+        nameContainer.className = 'name-edit-container';
+        nameContainer.style.width = '100%'; // Ensure it takes full width within bowler-stats
+
+        const nameDisplay = document.createElement('h4'); // Use h4 for bowler name display
+        nameDisplay.className = 'name-display';
+        nameDisplay.textContent = bowler.name;
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.className = 'name-input';
+        nameInput.value = bowler.name;
+        nameInput.style.display = 'none'; // Hidden by default
+
+        const editButton = document.createElement('button');
+        editButton.className = 'edit-button';
+        editButton.textContent = 'Edit';
+
+        nameContainer.appendChild(nameDisplay);
+        nameContainer.appendChild(nameInput);
+        nameContainer.appendChild(editButton);
+
+        bowlerDiv.appendChild(nameContainer);
+
 
         const statsDiv = document.createElement('div');
         statsDiv.innerHTML = `
@@ -571,6 +616,28 @@ function generateBowlerStatsDisplay() {
         `;
         bowlerDiv.appendChild(statsDiv);
         bowlerListDiv.appendChild(bowlerDiv);
+
+        // Event listeners for bowler name editing
+        editButton.addEventListener('click', () => {
+            nameDisplay.style.display = 'none';
+            nameInput.style.display = 'inline-block';
+            nameInput.focus();
+        });
+
+        nameInput.addEventListener('blur', () => {
+            bowler.name = nameInput.value.trim() || `Bowler ${bowler.id + 1}`; // Default if empty
+            nameDisplay.textContent = bowler.name;
+            nameInput.style.display = 'none';
+            nameDisplay.style.display = 'block'; // h4 is block-level, so make display block
+            updateCurrentBowlerNameDisplay(); // Update current bowler name display
+            renderBowlerOptions(); // Update bowler selection dropdown
+        });
+
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                nameInput.blur(); // Trigger blur to save
+            }
+        });
     });
 }
 
