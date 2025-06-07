@@ -226,6 +226,34 @@ select#current_bowler_select {
     font-style: italic;
 }
 
+/* NEW: Extras Counter Styling */
+.extras-counter .extra-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+.extras-counter .extra-buttons button,
+.extras-counter .extra-buttons select {
+    flex: 1 1 auto; /* Allow items to grow and shrink */
+    min-width: 80px; /* Ensure buttons don't get too small */
+    padding: 10px 15px;
+    font-size: 1em;
+}
+.extras-counter select {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.extras-counter p {
+    font-size: 0.95em;
+    color: #6c757d;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+
 /* Responsive Tweaks (Media Queries) */
 @media (min-width: 600px) {
   h1 {
