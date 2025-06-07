@@ -230,6 +230,17 @@ select#current_bowler_select {
     background-color: #fff;
 }
 
+/* NEW: Styles for the Bowler Statistics List to make it scrollable */
+#bowler-list {
+    max-height: 250px; /* Adjust height as needed to fit content without excessive scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #e9ecef; /* Subtle border */
+    border-radius: 8px;
+    padding-right: 5px; /* Prevents scrollbar from covering content */
+    margin-bottom: 10px; /* Space between list and dropdown */
+}
+
+
 .player-item {
     display: flex;
     justify-content: space-between;
