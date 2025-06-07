@@ -27,14 +27,17 @@ for (let i = 1; i <= 11; i++) {
 let currentBattingPlayers = []; // Will hold references to the actual player objects from teamPlayers
 let strikeBatsmanIndex = 0; // 0 for the first batsman in currentBattingPlayers, 1 for the second
 
-// Bowler data
-let bowlers = [
-  { id: 0, name: 'Bowler 1', runsConceded: 0, wicketsTaken: 0, ballsBowled: 0 },
-  { id: 1, name: 'Bowler 2', runsConceded: 0, wicketsTaken: 0, ballsBowled: 0 },
-  { id: 2, name: 'Bowler 3', runsConceded: 0, wicketsTaken: 0, ballsBowled: 0 },
-  { id: 3, name: 'Bowler 4', runsConceded: 0, wicketsTaken: 0, ballsBowled: 0 },
-  { id: 4, name: 'Bowler 5', runsConceded: 0, wicketsTaken: 0, ballsBowled: 0 }
-];
+// Bowler data - UPDATED TO 11 BOWLERS
+let bowlers = [];
+for (let i = 0; i < 11; i++) { // Loop 11 times (0 to 10)
+    bowlers.push({
+        id: i,
+        name: `Bowler ${i + 1}`, // Names from Bowler 1 to Bowler 11
+        runsConceded: 0,
+        wicketsTaken: 0,
+        ballsBowled: 0
+    });
+}
 let currentBowlerIndex = 0; // Index of the current bowler in the bowlers array
 
 // --- Action History for Undo ---
